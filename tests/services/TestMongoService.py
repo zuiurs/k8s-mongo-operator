@@ -116,7 +116,7 @@ class TestMongoService(TestCase):
 
     def test__mongoAdminCommand_NoPrimary(self, mongo_client_mock):
         mongo_client_mock.return_value.admin.command.side_effect = (
-            ConnectionFailure("No replica set members match selector \"Primary()\""),
+            ConnectionFailure('No replica set members match selector "Primary()"'),
             self._getFixture("initiate-ok"),
             self._getFixture("initiate-ok")
 
@@ -187,7 +187,7 @@ class TestMongoService(TestCase):
 
     def test_checkOrCreateReplicaSet_OperationalFailure(self, mongo_client_mock):
         bad_value = "BadValue: Unexpected field foo in replica set member configuration for member:" \
-            "{ _id: 0, foo: \"localhost:27017\" }"
+            '{ _id: 0, foo: "localhost:27017" }'
         mongo_client_mock.return_value.admin.command.side_effect = (
             OperationFailure(bad_value),
             OperationFailure(bad_value))
@@ -203,12 +203,12 @@ class TestMongoService(TestCase):
 
     def test_createUsers_ValueError(self, mongo_client_mock):
         mongo_client_mock.return_value.admin.command.side_effect = (None, OperationFailure(
-            "\"createUser\" had the wrong type. Expected string, found object"))
+            '"createUser" had the wrong type. Expected string, found object'))
 
         with self.assertRaises(OperationFailure) as context:
             self.service.createUsers(self.cluster_object)
 
-        self.assertEqual("\"createUser\" had the wrong type. Expected string, found object", str(context.exception))
+        self.assertEqual('"createUser" had the wrong type. Expected string, found object', str(context.exception))
 
     def test_createUsers_TimeoutError(self, mongo_client_mock):
         mongo_client_mock.return_value.admin.command.side_effect = (
